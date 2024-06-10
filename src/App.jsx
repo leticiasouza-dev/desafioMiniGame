@@ -1,12 +1,12 @@
 import './App.css'
 
-import Home from './pages/Home.jsx/Home'
+import Rotas from './Router/Rotas'
 
 function App() {
 
   return (
     <>
-    <Home/>
+    <Rotas/>
     </>
   )
 }

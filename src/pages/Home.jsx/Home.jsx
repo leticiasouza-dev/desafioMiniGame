@@ -1,8 +1,11 @@
 import React from "react";
 
 import * as S from './Style.jsx';
+import { Link } from 'react-router-dom';
+
 
 function Home(){
+
     return(
         <S.SessaoContainer>
             <S.DivConteudo>
@@ -12,7 +15,12 @@ function Home(){
                 o jogo termina. Boa sorte!
                 </p>
 
-                <button id="botaoIniciar">Inicial Jogo</button>
+                <Link className="inicioJogo" to="/game">
+                    <button id="botaoIniciar">Inicial Jogo</button>
+                </Link>
+                
+            
+                
             </S.DivConteudo>
             
         </S.SessaoContainer>

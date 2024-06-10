@@ -25,8 +25,9 @@ export const DivConteudo = styled.div`
     }
 
     #botaoIniciar{
+        cursor: pointer;
         padding: 1rem;
-        width: 20%;
+        width:100%;
         border-radius: 50px;
         color: #ffeb3b;
     }
