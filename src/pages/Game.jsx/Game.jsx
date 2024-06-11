@@ -16,13 +16,21 @@ function Game(){
 
         setTimeout(() =>{
             setMostrarMensagem(false);
+            sortearLetras();
         }, 3000)
+
+        
     }
 
-    // const adicionarLetra = () =>{
-    //     setLetras(alfabeto);
-    //     console.log(letras);
-    // }
+    const sortearLetras = () =>{
+        const letrasSorteadas = [];
+        for(let i = 0; i < 5; i++){
+            const indice = Math.floor(Math.random() * alfabeto.length); 
+            letrasSorteadas.push(alfabeto[indice]);
+        }
+
+        setLetras(letrasSorteadas);
+    }
 
 
     const renderizacaoConteudo = () => {
