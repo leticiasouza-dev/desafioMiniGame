@@ -51,17 +51,45 @@ function Game(){
         } 
     }
 
+
     document.addEventListener('keydown', function(event) { // verificando qual tecla foi precionada
+
         let teclaPressionada = event.key.toLocaleLowerCase();
-        for(let i = 0; i < letrasSorteadas.length; i++){
-            if(teclaPressionada === letrasSorteadas[i].toLocaleLowerCase()){
-                console.log("tecla correta");
-            } else{
-                console.log('tecla incorreta');
-            }
-        }
-        // console.log('Tecla pressionada: ' + teclaPressionada);
+        verificarTecla(teclaPressionada);
+    
     });
+
+    
+
+let indiceAtual = 0;
+function verificarTecla(teclaPressionada) {
+    
+
+    function teclaCorreta() {
+        console.log("Tecla correta");
+    }
+
+    function teclaIncorreta() {
+        console.log("Tecla incorreta. Você perdeu!");
+    }
+
+    function sequenciaCompleta() {
+        console.log("Sequência completa! Parabéns!");
+    
+        indiceAtual = 0; 
+    }
+
+    if (teclaPressionada === letrasSorteadas[indiceAtual].toLocaleLowerCase()) {
+        teclaCorreta();
+        indiceAtual++;
+        if (indiceAtual === letrasSorteadas.length) {
+            sequenciaCompleta();
+        }
+    } else {
+        teclaIncorreta();
+        indiceAtual = 0;
+    }
+}
 
 
     return(
