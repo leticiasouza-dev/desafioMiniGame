@@ -7,6 +7,7 @@ function Game(){
     const [jogoIniciado, setJogoIniciado] = useState(false); 
     const [mostrarMensagem, setMostrarMensagem] = useState(true); // mostrar a mensagem com o nome do jogador
     const [letras, setLetras] = useState([]);
+    const letrasSorteadas = [];
     const alfabeto = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
     const [mostrarBtnIniciar, setMostrarBtnIniciar] = useState(true);
 
@@ -23,7 +24,6 @@ function Game(){
     }
 
     const sortearLetras = () =>{
-        const letrasSorteadas = [];
         for(let i = 0; i < 5; i++){
             const indice = Math.floor(Math.random() * alfabeto.length); 
             letrasSorteadas.push(alfabeto[indice]);
@@ -52,8 +52,15 @@ function Game(){
     }
 
     document.addEventListener('keydown', function(event) { // verificando qual tecla foi precionada
-        let teclaPressionada = event.key;
-        console.log('Tecla pressionada: ' + teclaPressionada);
+        let teclaPressionada = event.key.toLocaleLowerCase();
+        for(let i = 0; i < letrasSorteadas.length; i++){
+            if(teclaPressionada === letrasSorteadas[i].toLocaleLowerCase()){
+                console.log("tecla correta");
+            } else{
+                console.log('tecla incorreta');
+            }
+        }
+        // console.log('Tecla pressionada: ' + teclaPressionada);
     });
 
 
@@ -65,13 +72,19 @@ function Game(){
 
                 {renderizacaoConteudo()}
                 {mostrarBtnIniciar && (
-                    <button id="botaoIniciar" onClick={() => {setJogoIniciado(true); setMostrarBtnIniciar(false)}}>Iniciar</button>
+                    <button id="botaoIniciar" onClick={() => {setJogoIniciado(true); setMostrarBtnIniciar(false) }}>Iniciar</button>
                     
                 )}
 
-                {letras.map((letras, index) =>(
-                    <span key={index}>{letras}</span>
-                ))}
+                
+                {letras.length > 0 && (
+                    <>
+                        <p>Precione as teclas na ordem correta</p>
+                        {letras.map((letras, index) =>(
+                            <span key={index}>{letras}</span>
+                        ))}
+                    </>
+                )}
 
             </S.DivGame>
 
