@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import * as S from './Style.jsx';
 import { useNavigate  } from "react-router-dom";
@@ -15,7 +15,10 @@ function Game(){
     const [mostrarBtnIniciar, setMostrarBtnIniciar] = useState(true);
     const [mostrarBtnTentarNovamente, setMostrarBtnTentarNovamente] = useState(false);
     const [mostrarBtnSair, setBtnSair] = useState(false);
-    const [mensagemInformacao, setMensagemInformacao] = useState('')
+
+    const [mostrarTimer, setMostrarTimer] = useState(false);
+    const [temporizador, setTemporizador] = useState(5);
+    const [btnResultado, setBtnResultado] = useState(false);
 
 
     const handleNomeSubmit = (event) => { // funcão para receber o  nome do jogador
@@ -87,6 +90,8 @@ function Game(){
         
             indiceAtual = 0; 
 
+            setMostrarBtnTentarNovamente(true)
+            setBtnResultado(true)
             // ver a pontuação, jogar novamente
         }
 
@@ -94,14 +99,11 @@ function Game(){
 
         if (teclaPressionada === letrasSorteadas[indiceAtual].toLocaleLowerCase()) {
             teclaCorreta();
-            setMensagemInformacao('Tecla Correta');
             indiceAtual++;
             if (indiceAtual === letrasSorteadas.length) {
                 sequenciaCompleta();
-                setMensagemInformacao('Sequencia incorreta')
             }
         } else {
-            setMensagemInformacao('teclaIncorreta')
             teclaIncorreta();
             indiceAtual = 0;
         } 
@@ -118,12 +120,17 @@ function Game(){
         setMostrarBtnTentarNovamente(false);
         setBtnSair(false);
         setJogoIniciado(false);
-        setMensagemInformacao('');
     };
+
+    
+        
+    
 
 
     return(
         <S.SessaoGame>
+
+            
 
             <S.DivGame>
                 <h2>MINI-GAME</h2>
@@ -145,15 +152,27 @@ function Game(){
 
                 {mostrarBtnTentarNovamente && mostrarBtnSair &&
                     <>
-                    <p>Você errou {mensagemInformacao}</p>
+                    <p>Você errou</p>
                     <button onClick={handleTentarNovamenteClick}>Tentar novamente</button>
                     <button onClick={handleSairClick}>Sair</button>
                     </>
                 }
 
-            </S.DivGame>
+                {btnResultado &&
+                <>
+                    <p>Parabéns Vocé Acertou a sequência</p>
+                     <button>Ver Resultado</button>
+                </>
+                   
+                }
 
-            
+                {mostrarMensagem && (
+                    <p>Temporalizador: {temporizador}</p>
+
+                )}
+                     
+
+            </S.DivGame>
 
         </S.SessaoGame>
     )
