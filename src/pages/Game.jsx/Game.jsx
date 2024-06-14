@@ -14,7 +14,8 @@ function Game(){
     const [mostrarMensagem, setMostrarMensagem] = useState(true); // mostrar a mensagem com o nome do jogador
     const [mostrarBtnIniciar, setMostrarBtnIniciar] = useState(true);
     const [mostrarBtnTentarNovamente, setMostrarBtnTentarNovamente] = useState(false);
-    const [mostrarBtnSair, setBtnSair] = useState(false)
+    const [mostrarBtnSair, setBtnSair] = useState(false);
+    const [mensagemInformacao, setMensagemInformacao] = useState('')
 
 
     const handleNomeSubmit = (event) => { // funcão para receber o  nome do jogador
@@ -36,6 +37,7 @@ function Game(){
         }
 
         setLetras(letrasSorteadas);
+        return letrasSorteadas;
     }
 
 
@@ -68,7 +70,6 @@ function Game(){
     
 
     let indiceAtual = 0;
-    let mensagemInformacao = '';
     function verificarTecla(teclaPressionada) {
     
         function teclaCorreta() {
@@ -93,14 +94,14 @@ function Game(){
 
         if (teclaPressionada === letrasSorteadas[indiceAtual].toLocaleLowerCase()) {
             teclaCorreta();
-            mensagemInformacao = 'Tecla Correta';
+            setMensagemInformacao('Tecla Correta');
             indiceAtual++;
             if (indiceAtual === letrasSorteadas.length) {
                 sequenciaCompleta();
-                mensagemInformacao = 'Sequencia incorreta'
+                setMensagemInformacao('Sequencia incorreta')
             }
         } else {
-            mensagemInformacao = 'teclaIncorreta'
+            setMensagemInformacao('teclaIncorreta')
             teclaIncorreta();
             indiceAtual = 0;
         } 
@@ -110,6 +111,15 @@ function Game(){
     const handleSairClick = () => {
         navigate('/');
     }
+
+    const handleTentarNovamenteClick = () => {
+        const novasLetras = sortearLetras();
+        setLetras(novasLetras);
+        setMostrarBtnTentarNovamente(false);
+        setBtnSair(false);
+        setJogoIniciado(false);
+        setMensagemInformacao('');
+    };
 
 
     return(
@@ -123,7 +133,6 @@ function Game(){
                     <button id="botaoIniciar" onClick={() => {setJogoIniciado(true); setMostrarBtnIniciar(false) }}>Iniciar</button>
                     
                 )}
-
                 
                 {letras.length > 0 && (
                     <>
@@ -137,7 +146,7 @@ function Game(){
                 {mostrarBtnTentarNovamente && mostrarBtnSair &&
                     <>
                     <p>Você errou {mensagemInformacao}</p>
-                    <button>Tentar novamente</button>
+                    <button onClick={handleTentarNovamenteClick}>Tentar novamente</button>
                     <button onClick={handleSairClick}>Sair</button>
                     </>
                 }
