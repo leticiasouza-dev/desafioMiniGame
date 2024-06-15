@@ -17,8 +17,8 @@ function Game(){
     const [mostrarBtnTentarNovamente, setMostrarBtnTentarNovamente] = useState(false);
     const [mostrarBtnSair, setBtnSair] = useState(false);
 
-    const [mostrarTimer, setMostrarTimer] = useState(false);
-    const [temporizador, setTemporizador] = useState(5);
+    // const [mostrarTimer, setMostrarTimer] = useState(false);
+    const [tempoRestante, setTempoRestante] = useState(5);
     const [btnResultado, setBtnResultado] = useState(false);
 
 
@@ -29,7 +29,7 @@ function Game(){
         setTimeout(() =>{
             setMostrarMensagem(false);
             sortearLetras();
-            setMostrarTimer(true);
+            iniciarTemporizador();
         }, 3000 );
 
         
@@ -61,7 +61,35 @@ function Game(){
             ); 
         } else if (nome && mostrarMensagem){
             return <p>Bem - vindo ao jogo {nome}</p>
-        } 
+        } else if(letras.length > 0){
+            return(
+                <>
+                                <article>
+                                    <p>Tempo restante: {tempoRestante} segundos</p>
+                                </article>
+                                <div style={{ display: 'flex' }}>
+                                    {letras.map((letra, index) => (
+                                        <div
+                                            key={index}
+                                            style={{
+                                                width: '50px',
+                                                height: '50px',
+                                                backgroundColor: teclasCorretas[index] ? '#4caf50' : '#11111d',
+                                                color: teclasCorretas[index] ? '#fff' : '#ffeb3b',
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                margin: '5px',
+                                                borderRadius: '5px'
+                                            }}
+                                        >
+                                            {letra}
+                                        </div>
+                                    ))}
+                                </div>
+                                </>
+            )
+        }
     }
 
 
@@ -89,6 +117,7 @@ function Game(){
             console.log("Tecla incorreta. Você perdeu!");
             setMostrarBtnTentarNovamente(true);
             setBtnSair(true);
+            setLetras([]);
 
         }
 
@@ -143,7 +172,21 @@ function Game(){
     }, [letras, indiceAtual]);
 
     
-        
+    const iniciarTemporizador = () => {
+        setTempoRestante(5);
+        const timer = setInterval(() => {
+          setTempoRestante((prevTempo) => prevTempo - 1);
+        }, 1000);
+    
+        setTimeout(() => {
+          clearInterval(timer);
+          if (!mostrarBtnTentarNovamente) {
+            setMostrarBtnTentarNovamente(true);
+            setBtnSair(true);
+          }
+        }, 5000);
+      };
+     
 
 
     return(
@@ -160,27 +203,6 @@ function Game(){
                     
                 )}
                 
-                {letras.length > 0 && (
-                    <>
-                        <p>Precione as teclas na ordem correta</p>
-                        {letras.map((letras, index) =>(
-                            <span 
-                            key={index}
-                            style={{
-                                width: '50px',
-                                height: '50px',
-                                backgroundColor: teclasCorretas[index] ? '#4caf50' : '#11111d',
-                                color: teclasCorretas[index] ? '#fff' : '#ffeb3b',
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                margin: '5px',
-                                borderRadius: '5px'
-                            }}
-                            >{letras}</span>
-                        ))}
-                    </>
-                )}
 
                 {mostrarBtnTentarNovamente && mostrarBtnSair &&
                     <>
@@ -198,10 +220,6 @@ function Game(){
                    
                 }
 
-                {mostrarTimer && (
-                    <p>Temporalizador: {temporizador}</p>
-
-                )}
                      
 
             </S.DivGame>
