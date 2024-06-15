@@ -9,6 +9,7 @@ function Game(){
     const [letras, setLetras] = useState([]);
     const letrasSorteadas = [];
     const alfabeto = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+    const [teclasCorretas, setTeclasCorretas] = useState([])
     
     //estados para as mensagem e elementos de tela
     const [mostrarMensagem, setMostrarMensagem] = useState(true); // mostrar a mensagem com o nome do jogador
@@ -28,7 +29,8 @@ function Game(){
         setTimeout(() =>{
             setMostrarMensagem(false);
             sortearLetras();
-        }, 3000)
+            setMostrarTimer(true);
+        }, 3000 );
 
         
     }
@@ -77,12 +79,17 @@ function Game(){
     
         function teclaCorreta() {
             console.log("Tecla correta");
+
+            let novasTeclasCorretas = [...teclasCorretas];
+            novasTeclasCorretas[indiceAtual] = true;
+            setTeclasCorretas(novasTeclasCorretas);
         }
 
         function teclaIncorreta () {
             console.log("Tecla incorreta. Você perdeu!");
             setMostrarBtnTentarNovamente(true);
             setBtnSair(true);
+
         }
 
         function sequenciaCompleta() {
@@ -93,6 +100,7 @@ function Game(){
             setMostrarBtnTentarNovamente(true)
             setBtnResultado(true)
             // ver a pontuação, jogar novamente
+
         }
 
        
@@ -122,9 +130,20 @@ function Game(){
         setJogoIniciado(false);
     };
 
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            verificarTecla(event.key.toLowerCase());
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [letras, indiceAtual]);
+
     
         
-    
 
 
     return(
@@ -145,7 +164,20 @@ function Game(){
                     <>
                         <p>Precione as teclas na ordem correta</p>
                         {letras.map((letras, index) =>(
-                            <span key={index}>{letras}</span>
+                            <span 
+                            key={index}
+                            style={{
+                                width: '50px',
+                                height: '50px',
+                                backgroundColor: teclasCorretas[index] ? '#4caf50' : '#11111d',
+                                color: teclasCorretas[index] ? '#fff' : '#ffeb3b',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                margin: '5px',
+                                borderRadius: '5px'
+                            }}
+                            >{letras}</span>
                         ))}
                     </>
                 )}
@@ -166,7 +198,7 @@ function Game(){
                    
                 }
 
-                {mostrarMensagem && (
+                {mostrarTimer && (
                     <p>Temporalizador: {temporizador}</p>
 
                 )}
